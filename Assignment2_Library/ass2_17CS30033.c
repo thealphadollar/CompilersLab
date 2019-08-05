@@ -3,78 +3,75 @@ Name: Shivam Kumar Jha
 Roll Number: 17CS30033
  */
 
+#include "myl.h"
 
 // prints a string of characters. The parameter is terminated by
 // ’\0’. The return value is the number of characters printed.
 
 int printStr(char *str) 
 {
-    int i=0;
-    char temp[1000];
-    for(;str[i] != '\0';i++)
-        temp[i] = str[i];
+    int size=0;
     
+    // get the string length
+    while(str[size]!='\0')
+    {
+        size++;
+    }
+
     /* inline assembly line commands for system call to print "temp" to STDOUT*/
     __asm__ __volatile__ (
-        "movl $(SYS_write), %%eax \n\t"
-        "movq $(STDOUT_FILENO), %%rdi \n\t"
+        "movl $1, %%eax \n\t"
+        "movq $1, %%rdi \n\t"
         "syscall \n\t"
         :
-        :"S"(temp),"d"(i)
+        :"S"(str),"d"(size)
         );
 
-    return i;
+    return size;
 }
 
 
 // reads a signed integer in ‘%d’ format. Caller gets the value
 // through the pointer parameter. The return value is OK (for success) or ERR (on failure).
 
-int readInt(int *n) 
+int readInt(int *int_ptr) 
 {
-	char temp[1];
-	char ep[100];
-	int val=0,i=0;
+    // max 100 characters accepted
+	char arr[100];
+	int is_neg = 0;
+	int val = 0;
+    int count = 0;
+    int byte_count = 20;
 	
-    while(1)
-    {
-        /*inline assembly command for system call to read 1 char into 'temp' from STDIN*/
-        __asm__ __volatile__ ("syscall"::"a"(0), "D"(0), "S"(temp), "d"(1));
-            
-        if(temp[0] == '\n' || temp[0] == ' ') break;
-        
-        else if(( (temp[0]-'0' > 9) || (temp[0]-'0' < 0) ) && temp[0] != '-' ) 
-            return ERR;
-        
-        else ep[i++]=temp[0]; 
-	}
-    
-    if( i > 9 || !i)
-        return ERR;
-    
-    if( ep[0] == '-' ) 
-    {
-        if( i == 1) 
-            return ERR;
+    __asm__ __volatile__ (
+          "movl $0, %%eax \n\t"
+          "movq $1, %%rdi \n\t"
+          "syscall \n\t"
+          :
+          :"S"(arr), "d"(byte_count)
+    ) ;
 
-        for( int j=1 ; j<i ; j++) {
-            if( ep[i] == '-') return ERR;
-            val *= 10;
-            val += ep[i]-'0';
-        }
-        val*=-1;
+    if (arr[count] == '-'){
+        is_neg = -1;
+        count++;
+    }
+    else{
+        is_neg = 1;
     }
 
-    else
-    {
-        for( int j=0; j<i ; j++)
-        {
-            if(ep[i] == '-') return ERR;
-            val *= 10;
-            val += ep[i]-'0';
-        }
+    while(arr[count] != '\n' && arr[count] != ' ' && arr[count] != '\t'){
+        // printf("%d\n", arr[count]);
+        if (( ((int)arr[count]-'0' > 9) || ((int)arr[count]-'0' < 0) )) 
+            return ERR;
+        val *= 10;
+        val += (arr[count] - '0');
+        count++;
     }
-    *n = val;
+
+    if (is_neg == -1){
+        val = -1 * val;
+    }
+    *int_ptr = val;
 	return OK;
 }
 
@@ -87,37 +84,40 @@ int readInt(int *n)
 
 int printInt(int n)
 {
-	char temp[100];
-	int i=0,fl=0;
-    if(!n) temp[i++]='0';
+	char arr[100];
+	int i=0;
+    int neg_flag=0;
+    if(!n){
+        arr[i++]='0';
+    } 
     else
     {
         if(n < 0)
         {
-            fl=1;
+            neg_flag=1;
             n*=-1;
         }
         while(n)
         {
-            temp[i++] = n%10 + '0';
+            arr[i++] = n%10 + '0';
             n/=10;
         }
-        if(fl) temp[i++]='-';
+        if(neg_flag) arr[i++]='-';
         for(int j=0,k=i-1;j<k;j++,k--)
         {
-            char swa = temp[j];
-            temp[j] = temp[k];
-            temp[k] = swa;
+            char swa = arr[j];
+            arr[j] = arr[k];
+            arr[k] = swa;
         }
     }
 
-	/* inline assembly line commands for system call to print "temp" to STDOUT*/
+	/* inline assembly code*/
 	__asm__ __volatile__ (
-        "movl $(SYS_write), %%eax \n\t"
-        "movq $(STDOUT_FILENO), %%rdi \n\t"
+        "movl $1, %%eax \n\t"
+        "movq $1, %%rdi \n\t"
         "syscall \n\t"
         :
-        :"S"(temp),"d"(i)
+        :"S"(arr),"d"(i)
         );
 
     return i;
@@ -128,84 +128,64 @@ int printInt(int n)
 // Caller gets the value through the pointer parameter. The return value is
 // ERR or OK.
 
-int readFlt(float *f) {
-	char temp[1];
-	char ep[100];
-	int i=0,fl=0;
-    float val = 0.0;
+int readFlt(double *flt_ptr) {
+	// max 100 characters accepted
+	char arr[100];
+	int is_neg = 0, pow_10 = 0;
+	double val = 0.00;
+    int dot_encountered = 0;
+    int count = 0;
+    int byte_count = 20;
 	
-    while(1)
-    {
-        /*inline assembly command for system call to read 1 char into 'temp' from STDIN*/
-        __asm__ __volatile__ ("syscall"::"a"(0), "D"(0), "S"(temp), "d"(1));
-            
-        if(temp[0] == '\n' || temp[0] == ' ') break;
-        
-        else if(( (temp[0]-'0' > 9) || (temp[0]-'0' < 0) ) && temp[0] != '-' && temp[0]!='.' ) 
+    __asm__ __volatile__ (
+          "movl $0, %%eax \n\t"
+          "movq $1, %%rdi \n\t"
+          "syscall \n\t"
+          :
+          :"S"(arr), "d"(byte_count)
+    ) ;
+
+    if (arr[count] == '-'){
+        is_neg = -1;
+        count++;
+    }
+    else{
+        is_neg = 1;
+    }
+
+    while(arr[count] != '\n' && arr[count] != ' ' && arr[count] != '\t'){
+        // printf("%f\n", (double)val);
+        // printf("%c\n", arr[count]);
+        if ((((int)arr[count]-'0' > 9) || ((int)arr[count]-'0' < 0)) && (arr[count]!='.')) 
             return ERR;
-        
-        else ep[i++]=temp[0]; 
-	}
-    
-	if( i > 12 || !i)
-        return ERR;
-
-	if ( ep[0]=='-') 
-    {
-		if(i==1) 
+        else if (arr[count]=='.' && dot_encountered){
             return ERR;
+        }
+        if (arr[count] == '.'){
+            dot_encountered = 1;
+            count++;
+            continue;
+        }
+        if (dot_encountered){
+            int  temp_div = 10;
+            for (int k=0; k<pow_10; k++){
+                temp_div *= 10;
+            }
+            // printf("\n\n%f\n\n" ,(double)(arr[count] - '0') / temp_div);
+            val += ((double)(arr[count] - '0') / temp_div);
+            pow_10++;
+        }
+        else{
+            val *= 10.00;
+            val = val + (double)(arr[count] - '0');
+        }
+        count++;
+    }
 
-		if(ep[1] == '.') return ERR;
-
-        float dec = 1;
-		for (int j=1; j<i; j++) 
-        {
-			if(ep[i] == '-') return ERR;
-			if(ep[i] == '.' && fl) return ERR;
-			if(ep[i] == '.') 
-            {
-				fl=1;
-				continue;
-			}
-			if(fl) {
-				dec *= 10.0;
-				val +=(ep[i]-'0')/dec;
-			}
-			else
-            {
-                val *= 10;
-                val += ep[i]-'0';
-	    	}
-		}
-		val*=-1;
-	}
-
-	else
-    {
-        if( ep[0]=='.' ) return ERR;
-		
-        float dec = 1;
-		for (int j=1; j<i; j++) 
-        {
-			if(ep[i] == '-') return ERR;
-			if(ep[i] == '.' && fl) return ERR;
-			if(ep[i] == '.') 
-            {
-				fl=1;
-				continue;
-			}
-			if(fl) {
-				dec *= 10.0;
-				val +=(ep[i]-'0')/dec;
-			}
-			else
-            {
-                val *= 10;
-                val += ep[i]-'0';
-	    	}
-		}
-	}
-	*f = val;/*The decimal is stored in *ep*/
+    if (is_neg == -1){
+        val = -1 * val;
+    }
+    *flt_ptr = val;
 	return OK;
 }
 
@@ -217,57 +197,81 @@ int readFlt(float *f) {
 // However, decimal point should be printed to differentiate it from an integer number. 
 // Returns the number of characters printed (on success) or ERR (on failure).
 
-int printFlt(float f)
-{
-	char temp[1000];
-	int i=0,fl=0;
-    if(!f) 
+int printFlt(double f){
+	char arr[100];
+    char zero = '0';
+    int i=0;
+    // handle negative float number
+    if(f<0)
     {
-        temp[i++] ='0';
-        temp[i++] ='.';
-        temp[i++] = '0';
+        arr[i]='-';
+        f=(-1.0)*f;
+        i++;
     }
+	int a=(int)f;
+    int j,k,count_bytes;
+	// Take the decimal part out of the number
+    double b = (double)f-(double)a;
+    
+    if(a==0)
+    {
+        // if there is zero only
+        arr[i]=zero;
+        i++;
+    }
+
     else
     {
-        if(f < 0)
+       while(a!=0)
         {
-            fl=1;
-            f*=-1;
+            int dig=a%10;
+            arr[i]=(char)(zero+dig);
+            a/=10;
+            i++;
         }
-        int dec = 0;
-        while((int)f != f)
+        if(arr[0]=='-')
         {
-            f*=10;
-            dec++;
-        } 
-        if(!dec)
-            temp[i++] = '0';
-
-        int n = f;
-        while(n)
-        {
-            if(i == dec) temp[i++] = '.';
-            temp[i++] = n%10 + '0';
-            n/=10;
+            j=1;
         }
-        if(fl) temp[i++]='-';
-        
-        for(int j=0,k=i-1;j<k;j++,k--)
+        else j=0;
+        k=i-1;
+        // reverse numbers to print in right order
+        while(j<k)
         {
-            char swa = temp[j];
-            temp[j] = temp[k];
-            temp[k] = swa;
+            char temp=arr[j];
+            arr[j]=arr[k];
+            arr[k]=temp;
+            j++;
+            k--;
         }
     }
 
-	/* inline assembly line commands for system call to print "temp" to STDOUT*/
-	__asm__ __volatile__ (
-        "movl $(SYS_write), %%eax \n\t"
-        "movq $(STDOUT_FILENO), %%rdi \n\t"
+    // handle the decimal part separately
+    // printf("\n%f\n", b);
+    if(b!=0)
+    {
+        arr[i]='.';
+        i++;
+        int p = 0;
+        while( p < 7 )
+        {
+            b=b*10;
+            int dig=(int)b;
+            arr[i]=(char)(zero+dig);
+            i++;
+            b=b-dig;
+            p++;
+        }
+	}
+    count_bytes = i;
+    __asm__ __volatile__ (
+        "movl $1, %%eax \n\t"
+        "movq $1, %%rdi \n\t"
         "syscall \n\t"
         :
-        :"S"(temp),"d"(i)
-        );
+        :"S"(arr), "d"(count_bytes)
+    );
 
-    return i;
+    return count_bytes;
 }
+
