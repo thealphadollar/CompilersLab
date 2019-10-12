@@ -483,7 +483,7 @@ multiplicative_expression: cast_expression
 	}
 	;
 
-additive_expression: :multiplicative_expression 
+additive_expression: multiplicative_expression 
 	{
 		$$=$1;
 	}
@@ -990,7 +990,7 @@ specifier_qualifier_list: type_specifier specifier_qualifier_list
 	;	
 
 
-enum_specifier: ENUM OPENFLOWERBR{
+enum_specifier: ENUM OPENFLOWERBRACKET{
 		// no semantic action required at this stage
 	}
 	| ENUM IDENTIFIER OPENFLOWERBRACKET enumerator_list CLOSEFLOWERBRACKET
@@ -1341,7 +1341,7 @@ block_item_list: block_item
 	;
 
 block_item: declaration
-	{{
+	{
 		$$ = new statement();
 	}
 	| statement
@@ -1360,7 +1360,7 @@ expression_statement: SEMICOLON
 	}
 	;
 
-selection_statement: :IF OPENROUNDBRACKET expression N CLOSEROUNDBRACKET M statement N %prec THEN
+selection_statement: IF OPENROUNDBRACKET expression N CLOSEROUNDBRACKET M statement N %prec THEN
 	{
 		backpatch ($4->nextlist, nextinstr());
 		convertInt2Bool($3);
