@@ -180,7 +180,6 @@ using namespace std;
 	block_item
 	block_item_list
 
-
 %%
 
 primary_expression: IDENTIFIER
@@ -1461,7 +1460,7 @@ jump_statement: GOTO IDENTIFIER SEMICOLON
 	{
 		$$ = new statement();
 	}
-	| RETURN SEMICOLON
+	| RETURN expression SEMICOLON
 	{
 		$$ = new statement();
 		emit("RETURN",$2->loc->name);
