@@ -1,13 +1,15 @@
 %{
 /*
-Assignment 4 Parser
-Name: Robin Babu Padamadan
-Roll No.: 17CS10045
+Assignment 5
+Name: Robin Babu Padamadan | Shivam Kumar Jha
+Roll No.: 17CS10045 | 17CS30033
 Section 1 (Odd)
 Flex Specifications
 */
 
 #include <stdio.h>
+#include <string.h>
+#include "asgn5_17CS10045_translator.h"
 #include "y.tab.h"
 void comment(void);
 %}
@@ -105,12 +107,28 @@ WS  					[ \t\v\n\f]
 "else"  {return ELSE;}
 "register"  {return REGISTER;}
 "union" {return UNION;}
-{IDENTIFIER}    {return IDENTIFIER;}
-{INT_CONST} {return INT_CONST;} 
-{FLOAT_CONST}   {return FLOAT_CONST;}
+{IDENTIFIER}    {
+	yylval.symp = table->lookup(yytext);
+	return IDENTIFIER;
+}
+{INT_CONST} {
+	yylval.intval = atoi(yytext);
+	return INT_CONST;
+}
+{FLOAT_CONST}   {
+	yylval.charval = yytext;
+	return FLOAT_CONST;
+}
 {ENUM_CONST}    {return ENUM_CONST;}
-{CHAR_CONST}    {return CHAR_CONST;}
-{STRING_LITERAL}    {return STRING_LITERAL;}
+{CHAR_CONST}    {
+	yylval.charval = yytext;
+	return CHAR_CONST;
+}
+
+{STRING_LITERAL}    {
+	yylval.charval = yytext;
+	return STRING_LITERAL;
+}
 
 "[" {return OPENSQUAREBRACKET;}
 "]" {return CLOSESQUAREBRACKET;}
