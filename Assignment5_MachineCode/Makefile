@@ -29,4 +29,4 @@ y.tab.h: asgn5_17CS10045.y
 	yacc -dtv asgn5_17CS10045.y -W
 	
 clean:
-	rm lex.yy.c y.tab.c y.tab.h lex.yy.o y.tab.o asgn5_17CS10045_translator.o y.output a.out
+	rm lex.yy.c y.tab.c y.tab.h lex.yy.o y.tab.o asgn5_17CS10045_translator.o y.output a.out asgn5_17CS10045_translator.h.gch asgn5_17CS10045_quads1.out asgn5_17CS10045_quads2.out asgn5_17CS10045_quads3.out asgn5_17CS10045_quads4.out asgn5_17CS10045_quads5.out

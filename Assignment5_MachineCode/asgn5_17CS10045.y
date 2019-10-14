@@ -97,7 +97,7 @@ using namespace std;
 %token UNION
 %token <symp> IDENTIFIER
 %token <intval> INT_CONST
-%token <floatval> FLOAT_CONST
+%token <charval> FLOAT_CONST
 %token <charval> ENUM_CONST
 %token <charval> CHAR_CONST
 %token <charval> STRING_LITERAL
@@ -1519,7 +1519,7 @@ declaration_list: declaration
 	;
 %%
 
-void yyerror(char *s) 
+void yyerror(string s) 
 {
-	printf("Parsing Error : %s\n",s);
+	cout<<s<<endl;
 }

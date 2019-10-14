@@ -17,7 +17,7 @@ void comment(void);
 
 SINGLE_LINE_COMMENT "//".*
 
-MULTI_LINE_COMMENT  "/*"
+MULTI_LINE_COMMENT			"/*"[^"*"]*"*"("*"|([^"/*"]*[^"*"]*"*"))*"/"
 
 identifier-nondigit [_a-zA-Z]
 digit   [0-9]
@@ -47,7 +47,7 @@ WS  					[ \t\v\n\f]
 
 
 {SINGLE_LINE_COMMENT}   {}
-{MULTI_LINE_COMMENT}    {comment();}
+{MULTI_LINE_COMMENT}    {}
 "->"    {return POINTSTO;}
 "++"    {return INCREMENT;}
 "--"    {return DECREMENT;}
@@ -162,6 +162,7 @@ WS  					[ \t\v\n\f]
 {WS}					{/* whitespace separates tokens */}
 
 %%
+
 /*
 void comment(void)
 {
@@ -175,6 +176,5 @@ void comment(void)
     }
     error("Improper commenting");
 }
-
 */
 
