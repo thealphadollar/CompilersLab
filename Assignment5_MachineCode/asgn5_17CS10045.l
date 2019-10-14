@@ -12,6 +12,7 @@ Flex Specifications
 #include "asgn5_17CS10045_translator.h"
 #include "y.tab.h"
 void comment(void);
+
 %}
 
 SINGLE_LINE_COMMENT "//".*
@@ -107,6 +108,7 @@ WS  					[ \t\v\n\f]
 "else"  {return ELSE;}
 "register"  {return REGISTER;}
 "union" {return UNION;}
+
 {IDENTIFIER}    {
 	yylval.symp = table->lookup(yytext);
 	return IDENTIFIER;
@@ -160,7 +162,7 @@ WS  					[ \t\v\n\f]
 {WS}					{/* whitespace separates tokens */}
 
 %%
-
+/*
 void comment(void)
 {
     char c;
@@ -173,4 +175,6 @@ void comment(void)
     }
     error("Improper commenting");
 }
+
+*/
 

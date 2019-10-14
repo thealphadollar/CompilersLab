@@ -7,15 +7,16 @@ Section 1 (Odd)
 Bison Specifications
 */
 
-#include <stdio.h>
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include <stdio.h>
 #include <sstream>
 #include "asgn5_17CS10045_translator.h"
 extern int yylex();
+void yyerror(string s);
 extern string Type;
-void yyerror(char*);
+
 using namespace std;
 %}
 
@@ -94,10 +95,10 @@ using namespace std;
 %token ELSE
 %token REGISTER
 %token UNION
-%token IDENTIFIER
+%token <symp> IDENTIFIER
 %token <intval> INT_CONST
 %token <floatval> FLOAT_CONST
-%token <intval> ENUM_CONST
+%token <charval> ENUM_CONST
 %token <charval> CHAR_CONST
 %token <charval> STRING_LITERAL
 
@@ -242,10 +243,6 @@ postfix_expression: primary_expression
 	}
 	| postfix_expression OPENSQUAREBRACKET expression CLOSESQUAREBRACKET
 	{
-
-	}
-	| postfix_expression OPENROUNDBRACKET CLOSEROUNDBRACKET
-	{
 		$$ = new array();
 		$$->array = $1->loc;					// copy the base
 		$$->type = $1->type->ptr;				// type = type of element
@@ -273,9 +270,20 @@ postfix_expression: primary_expression
  		// Mark that it contains array address and first time computation is done
 		$$->cat = "ARR";
 	}
-	| postfix_expression OPENROUNDBRACKET argument_expression_list CLOSEROUNDBRACKET
+	| postfix_expression OPENROUNDBRACKET CLOSEROUNDBRACKET
 	{
 		// no semantic action required at this stage
+	}
+	| postfix_expression OPENROUNDBRACKET argument_expression_list CLOSEROUNDBRACKET
+	{
+		$$ = new array();
+		$$->array = gentemp($1->type);
+		stringstream strs;
+	    strs <<$3;
+	    string temp_str = strs.str();
+	    char* intStr = (char*) temp_str.c_str();
+		string str = string(intStr);		
+		emit("CALL", $$->array->name, $1->array->name, str);
 	}
 	| postfix_expression PERIOD IDENTIFIER
 	{
@@ -838,7 +846,6 @@ expression: assignment_expression
 	{
 		$$=$1;
 	}
-	{printf("EXPRESSION\n");}
 	| expression COMMA assignment_expression
 	{
 		// no semantic action required at this stage
@@ -1082,46 +1089,39 @@ direct_declarator: IDENTIFIER
 	}
 	| direct_declarator OPENSQUAREBRACKET type_qualifier_list_opt ASTERISK CLOSESQUAREBRACKET
 	{
-		symtype * t = $1 -> type;
-		symtype * prev = NULL;
-		while (t->type == "ARR") {
-			prev = t;
-			t = t->ptr;
-		}
-		if (prev==NULL) {
-			int temp = atoi($3->loc->initial_value.c_str());
-			symtype* s = new symtype("ARR", $1->type, temp);
-			$$ = $1->update(s);
-		}
-		else {
-			prev->ptr =  new symtype("ARR", t, atoi($3->loc->initial_value.c_str()));
-			$$ = $1->update ($1->type);
-		}
+		// no semantic action required at this stage
 	}
-	| direct_declarator OPENROUNDBRACKET parameter_type_list CLOSEROUNDBRACKET
+	| direct_declarator OPENROUNDBRACKET CT parameter_type_list CLOSEROUNDBRACKET
 	{
-		symtype * t = $1 -> type;
-		symtype * prev = NULL;
-		while (t->type == "ARR") {
-			prev = t;
-			t = t->ptr;
+		table->name = $1->name;
+
+		if ($1->type->type !="VOID") {
+			sym *s = table->lookup("return");
+			s->update($1->type);		
 		}
-		if (prev==NULL) {
-			symtype* s = new symtype("ARR", $1->type, 0);
-			$$ = $1->update(s);
-		}
-		else {
-			prev->ptr =  new symtype("ARR", t, 0);
-			$$ = $1->update ($1->type);
-		}
+		$1->nested=table;
+
+		table->parent = globalTable;
+		changeTable (globalTable);				// Come back to globalsymbol table
+		currentSymbol = $$;
 	}
 	| direct_declarator OPENROUNDBRACKET identifier_list CLOSEROUNDBRACKET
 	{
 		// no semantic action required at this stage
 	}
-	| direct_declarator OPENROUNDBRACKET CLOSEROUNDBRACKET
+	| direct_declarator OPENROUNDBRACKET CT CLOSEROUNDBRACKET
 	{
-		// no semantic action required at this stage
+		table->name = $1->name;
+
+		if ($1->type->type !="VOID") {
+			sym *s = table->lookup("return");
+			s->update($1->type);		
+		}
+		$1->nested=table;
+
+		table->parent = globalTable;
+		changeTable (globalTable);				// Come back to globalsymbol table
+		currentSymbol = $$;
 	}
 	;
 
@@ -1320,11 +1320,11 @@ labeled_statement: IDENTIFIER COLON statement
 
 compound_statement: OPENFLOWERBRACKET CLOSEFLOWERBRACKET
 	{
-		$$=$2;
+		$$ = new statement();
 	}
 	| OPENFLOWERBRACKET block_item_list CLOSEFLOWERBRACKET
 	{
-		$$ = new statement();
+		$$=$2;
 	}
 	;
 
@@ -1332,7 +1332,7 @@ block_item_list: block_item
 	{
 		$$=$1;
 	}
-	| block_item_list block_item
+	| block_item_list M block_item
 	{
 		$$=$3;
 		backpatch ($1->nextlist, $2);
@@ -1351,11 +1351,11 @@ block_item: declaration
 
 expression_statement: SEMICOLON
 	{
-		$$=$1;
+		$$ = new expr();
 	}
 	| expression SEMICOLON
 	{
-		$$ = new expr();
+		$$=$1;
 	}
 	;
 
