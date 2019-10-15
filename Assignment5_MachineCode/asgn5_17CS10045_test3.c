@@ -1,20 +1,30 @@
-// Factorial sample code
-//this tests the function and declaration functionality
+// GCD sample code
+//Testing Function declaration
+// Shivam Kumar Jha | Robin Babu
+
+int gcd (int a, int b);
 
 
-int testInt = 8;
-void main () {
-	int n = 6;
-	int fn;
-	fn = factorial(n);
-	return;
+int main () 
+{
+	int x = 18,y = 24;
+	int hcf;
+	hcf = gcd(x,y);
+	return 0;
 }
-int factorial (int n) {
-	int m = n-1;
-	int r = 1;
-	if (m) {
-		int fn = factorial(m-1);
-		r = n*fn;
-	}
-	return r;
-}
+
+int gcd(int a, int b) 
+{ 
+    if (a == 0) 
+       return b; 
+    if (b == 0) 
+       return a; 
+
+    if (a == b) 
+        return a;
+
+    if (a > b) 
+        return gcd(a-b, b); 
+    return gcd(a, b-a); 
+} 
+  

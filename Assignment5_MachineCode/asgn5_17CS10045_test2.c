@@ -1,24 +1,21 @@
-//DANCING DOLL code
-//to check various conditional, expression, function and declaration functionalities
+//Checking expressions, conditions, functions and declaration functionalities
+// Shivam Kumar Jha | Robin Babu
 
-
-void our()
+void one()
 {
 int i;
-for(i=0 ;i<=3999;i+=2)
+for(i=25 ;i>0;i-=2)
 {
-if(i>='A'&& i<='Z')
-  i=32+i;
-  else
-  if(i>='a'&& i<='z')
-  i=32;
-}
-(prev)();
+  if(i>='B'&& i<=101)
+    i=2*i;
+  else{
+    if(i>55 && i<='x')
+      i=77;
+  }
 }
 
 void main()
-{
-int far,p;
-p=36;
-p=our();
+{  
+int p=0;
+p = one]();
 }

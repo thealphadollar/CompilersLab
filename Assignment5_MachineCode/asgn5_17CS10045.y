@@ -97,7 +97,7 @@ using namespace std;
 %token UNION
 %token <symp> IDENTIFIER
 %token <intval> INT_CONST
-%token <floatval> FLOAT_CONST
+%token <charval> FLOAT_CONST
 %token <charval> ENUM_CONST
 %token <charval> CHAR_CONST
 %token <charval> STRING_LITERAL
@@ -858,13 +858,6 @@ constant_expression: conditional_expression
 	}
 	;
 
-expression_optional: expression
-	{
-		// no semantic action required at this stage
-	}
-	|
-	;
-
 
 declaration: declaration_specifiers SEMICOLON
 	{
@@ -1079,9 +1072,48 @@ direct_declarator: IDENTIFIER
 	{
 		$$=$2;
 	}
-	| direct_declarator OPENSQUAREBRACKET  type_qualifier_list_opt assignment_expression_opt CLOSESQUAREBRACKET
+	| direct_declarator OPENSQUAREBRACKET  type_qualifier_list assignment_expression CLOSESQUAREBRACKET
 	{
 		// no semantic action required at this stage
+	}
+	| direct_declarator OPENSQUAREBRACKET  type_qualifier_list CLOSESQUAREBRACKET
+	{
+		// no semantic action required at this stage
+	}
+	| direct_declarator OPENSQUAREBRACKET assignment_expression CLOSESQUAREBRACKET
+	{
+		symtype * t = $1 -> type;
+		symtype * prev = NULL;
+		while (t->type == "ARR") {
+			prev = t;
+			t = t->ptr;
+		}
+		if (prev==NULL) {
+			int temp = atoi($3->loc->initial_value.c_str());
+			symtype* s = new symtype("ARR", $1->type, temp);
+			$$ = $1->update(s);
+		}
+		else {
+			prev->ptr =  new symtype("ARR", t, atoi($3->loc->initial_value.c_str()));
+			$$ = $1->update ($1->type);
+		}
+	}
+	| direct_declarator OPENSQUAREBRACKET CLOSESQUAREBRACKET
+	{
+		symtype * t = $1 -> type;
+		symtype * prev = NULL;
+		while (t->type == "ARR") {
+			prev = t;
+			t = t->ptr;
+		}
+		if (prev==NULL) {
+			symtype* s = new symtype("ARR", $1->type, 0);
+			$$ = $1->update(s);
+		}
+		else {
+			prev->ptr =  new symtype("ARR", t, 0);
+			$$ = $1->update ($1->type);
+		}
 	}
 	| direct_declarator OPENSQUAREBRACKET STATIC type_qualifier_list_opt assignment_expression CLOSESQUAREBRACKET
 	{
@@ -1138,9 +1170,6 @@ CT
 
 type_qualifier_list_opt: %empty
 	| type_qualifier_list
-	;
-assignment_expression_opt: %empty
-	| assignment_expression
 	;	
 
 pointer: ASTERISK
@@ -1221,7 +1250,7 @@ type_name: specifier_qualifier_list
 
 initializer: assignment_expression
 	{
-		// no semantic action required at this stage
+		$$ = $1->loc;
 	}
 	| OPENFLOWERBRACKET initializer_list CLOSEFLOWERBRACKET
 	{
@@ -1465,7 +1494,7 @@ jump_statement: GOTO IDENTIFIER SEMICOLON
 		$$ = new statement();
 		emit("RETURN",$2->loc->name);
 	}
-	| RETURN expression SEMICOLON
+	| RETURN SEMICOLON
 	{
 		$$ = new statement();
 		emit("RETURN","");
@@ -1492,22 +1521,17 @@ external_declaration: function_definition
 	}
 	;
 
-function_definition: declaration_specifiers declarator declaration_list compound_statement
+function_definition: declaration_specifiers declarator declaration_list CT compound_statement
 	{
 		// no semantic action required at this stage
 	}
-	| declaration_specifiers declarator compound_statement
-	{printf("FUNCTION DEFINITION\n");}
-	| declarator declaration_list compound_statement
+	| declaration_specifiers declarator CT compound_statement
 	{
 		table->parent = globalTable;
 		changeTable (globalTable);
-	}
-	| declarator compound_statement
-	{
-		// no semantic action required at this stage
-	}
+	}	
 	;
+
 declaration_list: declaration
 	{
 		// no semantic action required at this stage
@@ -1519,7 +1543,7 @@ declaration_list: declaration
 	;
 %%
 
-void yyerror(char *s) 
+void yyerror(string s) 
 {
-	printf("Parsing Error : %s\n",s);
+	cout<<s<<endl;
 }

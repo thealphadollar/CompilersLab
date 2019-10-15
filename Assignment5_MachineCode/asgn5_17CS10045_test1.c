@@ -1,33 +1,32 @@
-//sample code to test if a student passes or not
+//sample code to see how many people are obese
 //it checks function , declarations, and few conditions
+// Shivam Kumar Jha | Robin Babu
 
-
-void print_arr(int grades, int elements);
-int count_passes(int grades, int elements,int value);
+int count_obese(int weights, int threshold, int num);
 
 int main()
 {
-int grades=10;
-int result;
-print_arr(grades,10);
-result = count_passes(grades,10,70);
-if(result == 1)
-printf("There was %d pass.\n",result);
-else
-printf("There were %d passes.\n",result);
-return 0;
+    int weights[5];
+
+    weights[0] = 10;
+    weights[1] = 15;
+    weights[2] = 45;
+    weights[3] = 100;
+    weights[4] = 120;
+
+    int count = count_obese(weights,50,5);
+
+    printf("The number of obese people is %d", count);
+    return 0; 
 }
 
-void print_arr(int grades, int elements)
-{
-printf("%d ",grades);
-printf("\n");
-}
 
-int count_passes(int grades, int elements,int value)
+int count_obese(int weights, int threshold,int num)
 {
-int i ,passes = 0 ;
-if(grades>= value)
-passes++;
-return(passes);
+    int count=0;
+    for(int i=0;i<num;++i)
+    {
+        if(weights[i]>threshold) count++;
+    }
+    return count;
 }

@@ -1,39 +1,55 @@
 // Test Statements functionality
+//Tests pointer, array assignments
+//Tests iterative loops
+// Shivam Kumar Jha | Robin Babu
 int test = 3;
-int add (int a, int b) {
-	a = 10;
+
+int Lol (int s, int t) {
+	s = 10;
 	int *x, y;
 
-	// Pointer Assignments
-	x = &y;
 	*x = y;
 	y = *x;
+	x = &y;
 }
 
 
 
 void main () {
-	int i, a[10], v = 5;
+	int i, k = 2;
+	int *y = NULL;
+	int x[3];
+
+
+	x[0] = 1;
+	x[1] = 3;
+	x[2] = 2;
+
 	double d;
+	double *f;
+	char testing[10];
 	char *g=NULL;
-	char testChar[152];
-	char tst='s';
+	char one='a',two='b';
+	one = 'c';
+	two = 'd';
 
-
-	tst='t';
-	tst='u';
-
-	tst=testChar[0];
-
-	for (i=1; i<a[10]; i++) 
+	for (i=1; i<x[1]; i++) 
 		i++;
-	do i = i - 1; while (a[i] < v);
+
+	do k = k - 1; 
+	while (x[k] < k);
+	
+	
 	i = 2;
-	if (i&&v) i = 1;
-	while (v>a[i]) {
+	
+	if (i&&k || i^k) i = 1;
+
+	while (i<5) 
+	{
 		i--;
 	}
 	
+
 
 	return;
 }

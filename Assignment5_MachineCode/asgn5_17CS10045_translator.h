@@ -25,13 +25,23 @@ class symtable;					// Symbol Table
 
 
 //////////////////////////////////////global variables used in the translator.cxx file are declared here
-extern symtable* table;						// Current Symbbol Table
-extern symtable* globalTable;				// Global Symbbol Table
+extern symtable* table;						// Current Symbol Table
+extern symtable* globalTable;				// Global Symbol Table
 extern quadArray q;							// Array of Quads
 extern sym* currentSymbol;					// Pointer to just encountered symbol
 
 
 ///////////////////////////////////////Class definitions, non terminal type strucure and attributes and global functions
+struct exp {
+	string type; 							//Storing expression type as int or bool
+
+	sym* loc;								// Pointer to the symbol table entry
+
+	list<int> truelist;						// Truelist valid for boolean
+	list<int> falselist;					// Falselist valid for boolean expressions
+	list<int> nextlist;
+};
+
 class symtype { // Type of symbols in symbol table
 public:
 	symtype(string type, symtype* ptr = NULL, int width = 1);
@@ -53,10 +63,31 @@ public:
 	quad (string result, float arg1, string op = "EQUAL", string arg2 = "");			//constructors
 };
 
-class quadArray { // Array of quads
+struct expression {
+	string type; 							//to store whether the expression is of type int or bool
+
+	// Valid for non-bool type
+	sym* loc;								// Pointer to the symbol table entry
+
+	// Valid for bool type
+	list<int> truelist;						// Truelist valid for boolean
+	list<int> falselist;					// Falselist valid for boolean expressions
+
+	// Valid for statement expression
+	list<int> nextlist;
+};
+
+class symboltable { // Symbol Table class
 public:
-	vector <quad> array;;		                // Vector of quads
-	void print ();								// Print the quadArray
+	string name;				// Name of Table
+	int count;					// Count of temporary variables
+	list<sym> table; 			// The table of symbols
+	symboltable* parent;				// Immediate parent of the symbol table
+
+	symboltable (string name="NULL");
+	sym* lookup (string name);								// Lookup for a symbol in symbol table
+	void print();					            			// Print the symbol table
+	void update();						        			// Update offset of the complete symbol table
 };
 
 class sym { // Symbols class
@@ -73,6 +104,20 @@ public:
 	sym* link_to_symbolTable(symtable* t);
 };
 
+class quadArray { // Array of quads
+public:
+	vector <quad> array;;		                // Vector of quads
+	void print ();								// Print the quadArray
+};
+
+class symboltype { // Type of symbols in symbol table
+public:
+	symboltype(string type, symtype* ptr = NULL, int width = 1);
+	string type;
+	int width;					// Size of array (in case of arrays)
+	symboltype* ptr;				// for 2d arrays and pointers
+};
+
 class symtable { // Symbol Table class
 public:
 	string name;				// Name of Table
@@ -84,21 +129,6 @@ public:
 	sym* lookup (string name);								// Lookup for a symbol in symbol table
 	void print();					            			// Print the symbol table
 	void update();						        			// Update offset of the complete symbol table
-};
-
-
-/////////////////////////////////////////Attributes and their explanation for different non terminal type
-//Attributes for statements
-struct statement {
-	list<int> nextlist;				// Nextlist for statement
-};
-
-//Attributes for array
-struct array {
-	string cat;
-	sym* loc;					// Temporary used for computing array address
-	sym* array;					// Pointer to symbol table
-	symtype* type;				// type of the subarray generated
 };
 
 
@@ -117,16 +147,33 @@ struct expr {
 	list<int> nextlist;
 };
 
+/////////////////////////////////////////Attributes and their explanation for different non terminal type
+//Attributes for statements
+struct statement {
+	list<int> nextlist;				// Nextlist for statement
+};
+
+//Attributes for array
+struct array {
+	string cat;
+	sym* loc;					// Temporary used for computing array address
+	sym* array;					// Pointer to symbol table
+	symtype* type;				// type of the subarray generated
+};
+
 //////////////////////////////////////////Global functions required for the translator
-void emit(string op, string result, string arg1="", string arg2 = "");    //emits for adding quads to quadArray
 void emit(string op, string result, int arg1, string arg2 = "");		  //emits for adding quads to quadArray (arg1 is int)
 void emit(string op, string result, float arg1, string arg2 = "");        //emits for adding quads to quadArray (arg1 is float)
-
+void emit(string op, string result, string arg1="", string arg2 = "");    //emits for adding quads to quadArray
 
 sym* conv (sym*, string);							// TAC for Type conversion in program
 bool typecheck(sym* &s1, sym* &s2);					// Checks if two symbols have same type
 bool typecheck(symtype* t1, symtype* t2);			//checks if two symtype objects have same type
 
+sym* gentemp (symtype* t, string init = "");		// Generate a temporary variable and insert it in current symbol table
+
+int size_type (symtype*);							// Calculate size of any symbol type
+string print_type(symtype*);						// For printing type of symbol recursive printing of type
 
 void backpatch (list <int> lst, int i);
 list<int> makelist (int i);							        // Make a new list contaninig an integer
@@ -137,10 +184,5 @@ expr* convertBool2Int (expr*);				// convert bool to expression (int)
 
 void changeTable (symtable* newtable);               //for changing the current sybol table
 int nextinstr();									// Returns the next instruction number
-
-sym* gentemp (symtype* t, string init = "");		// Generate a temporary variable and insert it in current symbol table
-
-int size_type (symtype*);							// Calculate size of any symbol type 
-string print_type(symtype*);						// For printing type of symbol recursive printing of type
 
 #endif

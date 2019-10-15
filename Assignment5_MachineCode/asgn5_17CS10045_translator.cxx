@@ -29,22 +29,30 @@ quad::quad (string result, int arg1, string op, string arg2):
 	}
 
 quad::quad (string result, float arg1, string op, string arg2):
-	result (result), arg2(arg2), op (op) {
+	result (result), arg2(arg2), op (op) 
+	{
 		std::ostringstream buff;
    		buff<<arg1;
 		this->arg1 = buff.str();
 	}
 
+void printQuadArray() {
+	cout << "==============================" << endl;
+	cout << "Quad Translation" << endl;
+	cout << "------------------------------" << endl;
+	cout << "------------------------------"<< endl;
+}
+
 void quad::print () {
 	// Binary Operations
-	if (op=="ADD")					cout << result << " = " << arg1 << " + " << arg2;
-	else if (op=="SUB")				cout << result << " = " << arg1 << " - " << arg2;
-	else if (op=="MULT")			cout << result << " = " << arg1 << " * " << arg2;
-	else if (op=="DIVIDE")			cout << result << " = " << arg1 << " / " << arg2;
+	if (op=="PLUS")					cout << result << " = " << arg1 << " + " << arg2;
+	else if (op=="MINUS")				cout << result << " = " << arg1 << " - " << arg2;
+	else if (op=="ASTERISK")			cout << result << " = " << arg1 << " * " << arg2;
+	else if (op=="FORWARDSLASH")			cout << result << " = " << arg1 << " / " << arg2;
 	else if (op=="MODOP")			cout << result << " = " << arg1 << " % " << arg2;
 	else if (op=="XOR")				cout << result << " = " << arg1 << " ^ " << arg2;
-	else if (op=="INOR")			cout << result << " = " << arg1 << " | " << arg2;
-	else if (op=="BAND")			cout << result << " = " << arg1 << " & " << arg2;
+	else if (op=="OR")			cout << result << " = " << arg1 << " | " << arg2;
+	else if (op=="AMPERSAND")			cout << result << " = " << arg1 << " & " << arg2;
 	// Shift Operations
 	else if (op=="LEFTOP")			cout << result << " = " << arg1 << " << " << arg2;
 	else if (op=="RIGHTOP")			cout << result << " = " << arg1 << " >> " << arg2;
@@ -56,7 +64,7 @@ void quad::print () {
 	else if (op=="GT")				cout << "if " << arg1 <<  " > "  << arg2 << " goto " << result;
 	else if (op=="GE")				cout << "if " << arg1 <<  " >= " << arg2 << " goto " << result;
 	else if (op=="LE")				cout << "if " << arg1 <<  " <= " << arg2 << " goto " << result;
-	else if (op=="GOTOOP")			cout << "goto " << result;		
+	else if (op=="GOTO")			cout << "goto " << result;		
 	//Unary Operators
 	else if (op=="ADDRESS")			cout << result << " = &" << arg1;
 	else if (op=="PTRR")			cout << result	<< " = *" << arg1 ;
@@ -76,22 +84,29 @@ void quad::print () {
 }
 
 void quadArray::print() {
-	cout << setw(30) << setfill ('=') << "="<< endl;
+	cout << "=============================="<< endl;
 	cout << "Quad Translation" << endl;
-	cout << setw(30) << setfill ('-') << "-"<< setfill (' ') << endl;
-	for (vector<quad>::iterator it = array.begin(); it!=array.end(); it++) {
-		if (it->op != "LABEL") {
-			cout << "\t" << setw(4) << it - array.begin() << ":\t";
-			it->print();
+	cout << "------------------------------" << endl;
+	
+	for(int i=0;i<array.size();++i)
+	{
+		if (array[i].op != "LABEL") 
+		{
+			cout << "\t" << i << ":\t";
+			array[i].print();
 		}
-		else {
+		else 
+		{
 			cout << "\n";
-			it->print();
+			array[i].print();
 			cout << "\n";
 		}
 	}
-	cout << setw(30) << setfill ('-') << "-"<< endl;
+
+
+	cout << "------------------------------" << endl;
 }
+
 
 sym::sym (string name, string t, symtype* ptr, int width): name(name)  {
 	type = new symtype (t, ptr, width);
@@ -111,21 +126,22 @@ symtable::symtable (string name): name (name), count(0) {}
 
 void symtable::print() {
 	list<symtable*> tablelist;
-	cout << setw(115) << setfill ('=') << "="<< endl;
-	cout << "Symbol Table: " << setfill (' ') << left << setw(50)  << this -> name ;
+	cout << "==================================================================================================================="<< endl;
+	cout << "Symbol Table: " << "                                  "  << this -> name ;
 	cout << right << setw(25) << "Parent: ";
 	if (this->parent!=NULL)
 		cout << this -> parent->name;
 	else cout << "null" ;
 	cout << endl;
-	cout << setw(100) << setfill ('-') << "-"<< endl;
-	cout << setfill (' ') << left << setw(20) << "Name";
-	cout << left << setw(25) << "Type";
-	cout << left << setw(20) << "Initial Value";
-	cout << left << setw(12) << "Size";
-	cout << left << setw(12) << "Offset";
-	cout << left << "Nested" << endl;
-	cout << setw(115) << setfill ('-') << "-"<< setfill (' ') << endl;
+	cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
+	cout << "Name";
+	cout << "                Type";
+	cout << "               Initial Value";
+	cout << "        Size";
+	cout << "        Offset";
+	cout << "        Nested" << endl;
+	cout << "-------------------------------------------------------------------------------------------------------------------" << endl;
+	
 	
 	for (list <sym>::iterator it = table.begin(); it!=table.end(); it++) {
 		cout << left << setw(20) << it->name;
@@ -143,14 +159,18 @@ void symtable::print() {
 			tablelist.push_back (it->nested);
 		}
 	}
+	
 	cout << setw(115) << setfill ('-') << "-"<< setfill (' ') << endl;
 	cout << endl;
+
+
 	for (list<symtable*>::iterator iterator = tablelist.begin();
 			iterator != tablelist.end();
 			++iterator) 
 		{
 	    	(*iterator)->print();
 		}		
+
 }
 
 void symtable::update() {
@@ -174,6 +194,61 @@ void symtable::update() {
 	}
 }
 
+bool checktype(sym*& s1, sym*& s2){ 	// Check if the symbols have same type or not
+	symtype* type1 = s1->type;
+	symtype* type2 = s2->type;
+	if ( typecheck (type1, type2) ) return true;
+	else if (s1 = conv (s1, type2->type) ) return true;
+	else if (s2 = conv (s2, type1->type) ) return true;
+	else return false;
+}
+
+string join(string a,string b,string c)
+{
+	string x;
+	x = a+b+c;
+	return x;
+}
+
+
+sym* conversion (sym* s, string t) {
+	sym* temp = gentemp(new symtype(t));
+	if (s->type->type=="INTEGER" ) {
+		if (t=="DOUBLE") {
+			emit ("EQUAL", temp->name, join("int2double(", s->name, ")"));
+			return temp;
+		}
+		else if (t=="CHAR") {
+			emit ("EQUAL", temp->name, join("int2char(", s->name, ")"));
+			return temp;
+		}
+		return s;
+	}
+	else if (s->type->type=="DOUBLE" ) {
+		if (t=="INTEGER") {
+			emit ("EQUAL", temp->name, join("double2int(", s->name, ")"));
+			return temp;
+		}
+		else if (t=="CHAR") {
+			emit ("EQUAL", temp->name, join("double2char(", s->name, ")"));
+			return temp;
+		}
+		return s;
+	}
+	else if (s->type->type=="CHAR") {
+		if (t=="INTEGER") {
+				emit ("EQUAL", temp->name, join("char2int(", s->name, ")"));
+				return temp;
+			}
+		if (t=="DOUBLE") {
+				emit ("EQUAL", temp->name, join("char2double(", s->name, ")"));
+				return temp;
+			}
+		return s;
+	}
+	return s;
+}
+
 sym* symtable::lookup (string name) {
 	sym* s;
 	list <sym>::iterator it;
@@ -192,7 +267,8 @@ sym* symtable::lookup (string name) {
 }
 
 
-void emit(string op, string result, string arg1, string arg2) {
+void emit(string op, string result, string arg1, string arg2) 
+{
 	q.array.push_back(*(new quad(result,arg1,op,arg2)));
 }
 void emit(string op, string result, int arg1, string arg2) {
@@ -277,6 +353,19 @@ list<int> makelist (int i) {
 	list<int> l(1,i);
 	return l;
 }
+
+list<int> maketruelist (list<int> &a, list <int> &b) {
+	list<int> l(1,4);
+	a.merge(b);
+	return a;
+}
+
+list<int> makefalselist (list<int> &a, list <int> &b) {
+	list<int> l(1,3);
+	b.merge(a);
+	return b;
+}
+
 list<int> merge (list<int> &a, list <int> &b) {
 	a.merge(b);
 	return a;
@@ -306,6 +395,22 @@ expr* convertBool2Int (expr* e) {	// Convert any expression to bool
 	}
 }
 
+expr* convertStr2Int (expr* e) {	// Convert str expression to int
+	if (e->type=="STR") {
+		e->loc = gentemp(new symtype("INTEGER"));
+		backpatch (e->truelist, nextinstr());
+		emit ("EQUAL", e->loc->name, "true");
+		stringstream strs;
+	    strs << nextinstr()+1;
+	    string temp_str = strs.str();
+	    char* intStr = (char*) temp_str.c_str();
+		string str = string(intStr);
+		emit ("GOTOOP", str);
+		backpatch (e->falselist, nextinstr());
+		emit ("EQUAL", e->loc->name, "false");
+	}
+}
+
 void changeTable (symtable* newtable) {	// Change current symbol table
 	table = newtable;
 } 
@@ -314,6 +419,15 @@ void changeTable (symtable* newtable) {	// Change current symbol table
 int nextinstr() {
 	return q.array.size();
 }
+
+int size_var (int argc, char* argv[]){
+	globalTable = new symtable("Global");
+	table = globalTable;
+	yyparse();
+	globalTable->update();
+	globalTable->print();
+	q.print();
+};
 
 sym* gentemp (symtype* t, string init) {
 	char n[10];
@@ -336,7 +450,6 @@ int size_type (symtype* t){
 	else if(t->type=="FUNC") return 0;
 }
 
-
 string print_type (symtype* t){
 	if (t==NULL) return "null";
 	if(t->type=="VOID")	return "void";
@@ -358,7 +471,8 @@ string print_type (symtype* t){
 
 
 
-int  main (int argc, char* argv[]){
+int  main (int argc, char* argv[])
+{
 	globalTable = new symtable("Global");
 	table = globalTable;
 	yyparse();

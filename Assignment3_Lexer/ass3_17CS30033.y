@@ -1,5 +1,4 @@
-%{ /* C Declarations and Definitions */
-#include <stdio.h>
+%{#include <stdio.h>
 
 extern int yylex();
 void yyerror(char *s);
