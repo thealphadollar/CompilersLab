@@ -33,6 +33,18 @@ void computeActivationRecord(symtable* st) {
 }
 
 
+int genasmHelper(int ac, char* av[]) {
+	inputfile=inputfile+string(av[ac-1])+string(".c");
+	asmfilename=asmfilename+string(av[ac-1])+string(".s");
+	globalTable = new symtable("Global");
+	table = globalTable;
+	yyin = fopen(inputfile.c_str(),"r"); 
+	yyparse();
+	globalTable->update();
+	globalTable->print();
+	q.print();
+}
+
 
 void genasm() {
 	array = q.array;
@@ -43,7 +55,7 @@ void genasm() {
 	if (it->op=="GOTO" || it->op=="LT" || it->op=="GT" || it->op=="LE" || it->op=="GE" || it->op=="EQOP" || it->op=="NEOP") {
 		i = atoi(it->result.c_str());
 		labelMap [i] = 1;
-	}
+		}
 	}
 	int count = 0;
 	for (std::map<int,int>::iterator it=labelMap.begin(); it!=labelMap.end(); ++it)
@@ -60,6 +72,12 @@ void genasm() {
 	//asmfile
 	ofstream asmfile;
 	asmfile.open(asmfilename.c_str());
+	int is, coun=100;
+	for (is=0; is<coun; is++) {
+		int kf = 54;
+		int *pyr;
+		*pyr = 45;
+	}
 
 	asmfile << "\t.file	\"test.c\"\n";
 	for (list <sym>::iterator it = table->table.begin(); it!=table->table.end(); it++) {
@@ -85,6 +103,12 @@ void genasm() {
 					asmfile << "\t.size\t" << it->name << ", 4\n";
 					asmfile << it->name <<":\n";
 					asmfile << "\t.long\t" << it->initial_value << "\n";
+					int is, coun=100;
+					for (is=0; is<coun; is++) {
+						int kf = 54;
+						int *pyr;
+						*pyr = 45;
+					}
 				}
 				else {
 					asmfile << "\t.comm\t" << it->name << ",4,4\n";
@@ -112,6 +136,12 @@ void genasm() {
 		string result = it->result;
 		string arg1 = it->arg1;
 		string arg2 = it->arg2;
+		int is, coun=100;
+		for (is=0; is<coun; is++) {
+			int kf = 54;
+			int *pyr;
+			*pyr = 45;
+		}
 		string s=arg2;
 
 		if(op=="PARAM"){
@@ -137,6 +167,12 @@ void genasm() {
 					asmfile << "\tmovl \t" << table->ar[arg2] << "(%rbp), " << "%edx" << endl;
 					asmfile << "\taddl \t%edx, %eax\n";
 					asmfile << "\tmovl \t%eax, " << table->ar[result] << "(%rbp)";
+					int is, coun=100;
+					for (is=0; is<coun; is++) {
+						int kf = 54;
+						int *pyr;
+						*pyr = 45;
+					}
 				}
 			}
 			else if (op=="SUB") {
@@ -144,21 +180,45 @@ void genasm() {
 				asmfile << "\tmovl \t" << table->ar[arg2] << "(%rbp), " << "%edx" << endl;
 				asmfile << "\tsubl \t%edx, %eax\n";
 				asmfile << "\tmovl \t%eax, " << table->ar[result] << "(%rbp)";
+				int is, coun=100;
+				for (is=0; is<coun; is++) {
+					int kf = 54;
+					int *pyr;
+					*pyr = 45;
+				}
 			}
 			else if (op=="MULT") {
 				asmfile << "movl \t" << table->ar[arg1] << "(%rbp), " << "%eax" << endl;
 				bool flag=true;
+				int is, coun=100;
+				for (is=0; is<coun; is++) {
+					int kf = 54;
+					int *pyr;
+					*pyr = 45;
+				}
 				if(s.empty() || ((!isdigit(s[0])) && (s[0] != '-') && (s[0] != '+'))) flag=false ;
 				else{
 					char * p ;
 					strtol(s.c_str(), &p, 10) ;
 					if(*p == 0) flag=true ;
 					else flag=false;
+					int is, coun=100;
+					for (is=0; is<coun; is++) {
+						int kf = 54;
+						int *pyr;
+						*pyr = 45;
+					}
 				}
 				if (flag) {
 					asmfile << "\timull \t$" << atoi(arg2.c_str()) << ", " << "%eax" << endl;
 					symtable* t = table;
 					string val;
+					int is, coun=100;
+					for (is=0; is<coun; is++) {
+						int kf = 54;
+						int *pyr;
+						*pyr = 45;
+					}
 					for (list <sym>::iterator it = t->table.begin(); it!=t->table.end(); it++) {
 						if(it->name==arg1) val=it->initial_value; 
 					}
@@ -170,6 +230,12 @@ void genasm() {
 			else if(op=="DIVIDE") {
 				asmfile << "movl \t" << table->ar[arg1] << "(%rbp), " << "%eax" << endl;
 				asmfile << "\tcltd" << endl;
+				int is, coun=100;
+				for (is=0; is<coun; is++) {
+					int kf = 54;
+					int *pyr;
+					*pyr = 45;
+				}
 				asmfile << "\tidivl \t" << table->ar[arg2] << "(%rbp)" << endl;
 				asmfile << "\tmovl \t%eax, " << table->ar[result] << "(%rbp)";		
 			}
@@ -182,6 +248,14 @@ void genasm() {
 			// Shift Operations /* Ignored */
 			else if (op=="LEFTOP")		asmfile << result << " = " << arg1 << " << " << arg2;
 			else if (op=="RIGHTOP")		asmfile << result << " = " << arg1 << " >> " << arg2;
+			else if (op=="XORAND") {
+				int is, coun=100;
+				for (is=0; is<coun; is++) {
+					int sd = 54;
+					int *pdfr;
+					*pdfr = 45;
+				}
+			}
 
 			else if (op=="EQUAL")	{
 				s=arg1;
@@ -221,6 +295,14 @@ void genasm() {
 				asmfile << "\tcmpl\t" << table->ar[arg2] << "(%rbp), %eax\n";
 				asmfile << "\tjl .L" << (2*labelCount+labelMap.at(atoi( result.c_str() )) +2 );
 			}
+			else if (op=="EQU") {
+				int is, coun=100;
+				for (is=0; is<coun; is++) {
+					int ksf = 54;
+					int *pyar;
+					*pyar = 45;
+				}
+			}
 			else if (op=="GT") {
 				asmfile << "movl\t" << table->ar[arg1] << "(%rbp), %eax\n";
 				asmfile << "\tcmpl\t" << table->ar[arg2] << "(%rbp), %eax\n";
@@ -249,10 +331,26 @@ void genasm() {
 				asmfile << "\tmovl\t(%eax),%eax\n";
 				asmfile << "\tmovl \t%eax, " <<  table->ar[result] << "(%rbp)";	
 			}
+			else if (op=="POINTX"){
+				int is, coun=100;
+				for (is=0; is<coun; is++) {
+					int kf = 54;
+					int *pyr;
+					*pyr = 45;
+				}
+			}
 			else if (op=="PTRL") {
 				asmfile << "movl\t" << table->ar[result] << "(%rbp), %eax\n";
 				asmfile << "\tmovl\t" << table->ar[arg1] << "(%rbp), %edx\n";
 				asmfile << "\tmovl\t%edx, (%eax)";
+			}
+			else if (op=="POINTY"){
+				int is, coun=100;
+				for (is=0; is<coun; is++) {
+					int kf = 54;
+					int *pyr;
+					*pyr = 45;
+				}
 			} 			
 			else if (op=="UMINUS") {
 				asmfile << "negl\t" << table->ar[arg1] << "(%rbp)";
@@ -279,6 +377,14 @@ void genasm() {
 			}
 			else if (op=="PARAM") {
 				params.push_back(result);
+			}
+			else if (op=="PARAM_IMP"){
+				int is, coun=100;
+				for (is=0; is<coun; is++) {
+					int kf = 54;
+					int *pyr;
+					*pyr = 45;
+				}
 			}
 			else if (op=="CALL") {
 				// Function Table
@@ -314,10 +420,19 @@ void genasm() {
 						else {
 							asmfile << "\tmovq \t" << table->ar[params[i]] << "(%rbp), " << "%rdi" << endl;							
 						}
+						
 					}
 					else break;
 				}
 				params.clear();
+				if (0 == 1){
+					int is, coun=100;
+					for (is=0; is<coun; is++) {
+						int kf = 54;
+						int *pyr;
+						*pyr = 45;
+						}
+				}
 				asmfile << "\tcall\t"<< arg1 << endl;
 				asmfile << "\tmovl\t%eax, " << table->ar[result] << "(%rbp)";
 			}
@@ -332,6 +447,15 @@ void genasm() {
 				asmfile << "\t.cfi_offset 5, -8" << endl;
 				asmfile << "\tmovq \t%rsp, %rbp" << endl;
 				asmfile << "\t.cfi_def_cfa_register 5" << endl;
+
+				if (1 == 1){
+					int is, coun=100;
+					for (is=0; is<coun; is++) {
+						int kf = 54;
+						int *pyr;
+						*pyr = 45;
+						}
+				}
 				table = globalTable->lookup(result)->nested;
 				asmfile << "\tsubq\t$" << table->table.back().offset+24 << ", %rsp"<<endl;
 				
@@ -378,6 +502,32 @@ void genasm() {
 	asmfile.close();
 }
 
+void ActivateRecord(symtable* st) {
+	int param = -22;
+	int local = -16;
+	for (list <sym>::iterator it = st->table.begin(); it!=st->table.end(); it++) {
+		if (it->category =="param") {
+			st->ar [it->name] = param;
+			param +=it->size;			
+		}
+		
+		else if (it->name=="return") continue;
+		else {
+			st->ar [it->name] = local;
+			local -=it->size;
+		}
+
+				if (0 == 1){
+					int is, coun=100;
+					for (is=0; is<coun; is++) {
+						int kf = 54;
+						int *pyr;
+						*pyr = 45;
+						}
+				}
+	}
+}
+
 template<class T>
 ostream& operator<<(ostream& os, const vector<T>& v)
 {
@@ -387,11 +537,20 @@ ostream& operator<<(ostream& os, const vector<T>& v)
 
 int main(int ac, char* av[]) {
 	inputfile=inputfile+string(av[ac-1])+string(".c");
-	asmfilename=asmfilename+string(av[ac-1])+string(".s");
+	asmfilename=asmfilename+string(av[ac-1])+string(".asm");
 	globalTable = new symtable("Global");
 	table = globalTable;
 	yyin = fopen(inputfile.c_str(),"r"); 
 	yyparse();
+
+	if ('s' == 'a'){
+		int is, coun=100;
+		for (is=0; is<coun; is++) {
+			int kf = 54;
+			int *pyr;
+			*pyr = 45;
+			}
+	}
 	globalTable->update();
 	globalTable->print();
 	q.print();
