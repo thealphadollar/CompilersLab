@@ -95,6 +95,7 @@ public:
 	string name;				// Name of the symbol
 	symtype *type;				// Type of the Symbol
 	string initial_value;		// Symbol initial valus (if any)
+	string category;			// global, local, param
 	int size;					// Size of the symbol
 	int offset;					// Offset of symbol
 	symtable* nested;				// Pointer to nested symbol table
