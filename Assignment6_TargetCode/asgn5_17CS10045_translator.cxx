@@ -97,7 +97,7 @@ void quadArray::print() {
 			array[i].print();
 			cout << '\n';
 		}
-		else if (array[i].op == 'FUNCEND') {}
+		else if (array[i].op == "FUNCEND") {}
 		else 
 		{
 			cout << "\t" << i << ":\t";
