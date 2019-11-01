@@ -257,8 +257,8 @@ postfix_expression: primary_expression
 		$$->type = $1->type->ptr;				// type = type of element
 		$$->loc = gentemp(new symtype("INTEGER"));		// store computed address
 		
-		// New address =(if only) already computed + $3 * new width
-		if ($1->cat=="ARR") {						// if already computed
+		
+		if ($1->cat=="ARR") {						
 			sym* t = gentemp(new symtype("INTEGER"));
 			stringstream strs;
 		    strs <<size_type($$->type);
@@ -1141,7 +1141,7 @@ direct_declarator: IDENTIFIER
 			s->update($1->type);		
 		}
 		$1->nested=table;
-
+		$1->category = "function";
 		table->parent = globalTable;
 		changeTable (globalTable);				// Come back to globalsymbol table
 		currentSymbol = $$;
@@ -1159,7 +1159,7 @@ direct_declarator: IDENTIFIER
 			s->update($1->type);		
 		}
 		$1->nested=table;
-
+		$1->category = "function";
 		table->parent = globalTable;
 		changeTable (globalTable);				// Come back to globalsymbol table
 		currentSymbol = $$;
@@ -1172,7 +1172,7 @@ CT
 		if (currentSymbol->nested==NULL) changeTable(new symtable(""));	// Function symbol table doesn't already exist
 		else {
 			changeTable (currentSymbol ->nested);						// Function symbol table already exists
-			emit ("LABEL", table->name);
+			emit ("FUNC", table->name);
 		}
 	}
 	;
@@ -1232,7 +1232,7 @@ parameter_list: parameter_declaration
 
 parameter_declaration: declaration_specifiers declarator
 	{
-		// no semantic action required at this stage
+		$2->category = "param";
 	}
 	| declaration_specifiers
 	{
@@ -1422,8 +1422,8 @@ selection_statement: IF OPENROUNDBRACKET expression N CLOSEROUNDBRACKET M statem
 	}
 	;
 
-iteration_statement
-	:WHILE M OPENROUNDBRACKET expression CLOSEROUNDBRACKET M statement 
+iteration_statement:
+	WHILE M OPENROUNDBRACKET expression CLOSEROUNDBRACKET M statement 
 	{
 		$$ = new statement();
 		convertInt2Bool($4);
@@ -1450,7 +1450,6 @@ iteration_statement
 		backpatch ($7->truelist, $2);
 		backpatch ($3->nextlist, $4);
 
-		// Some bug in the next statement
 		$$->nextlist = $7->falselist;
 	}
 	|FOR OPENROUNDBRACKET expression_statement M expression_statement CLOSEROUNDBRACKET M statement
@@ -1536,6 +1535,7 @@ function_definition: declaration_specifiers declarator declaration_list CT compo
 	}
 	| declaration_specifiers declarator CT compound_statement
 	{
+		emit("FUNCEND", table->name);
 		table->parent = globalTable;
 		changeTable (globalTable);
 	}	

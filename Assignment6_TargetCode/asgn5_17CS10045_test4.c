@@ -1,7 +1,16 @@
+/*
+Assignment 6
+Name: Robin Babu Padamadan | Shivam Kumar Jha
+Roll No.: 17CS10045 | 17CS30033
+Section 1 (Odd)
+Test Case 4
+*/
+
+
 // Test Statements functionality
 //Tests pointer, array assignments
 //Tests iterative loops
-// Shivam Kumar Jha | Robin Babu
+
 int test = 3;
 
 int Lol (int s, int t) {

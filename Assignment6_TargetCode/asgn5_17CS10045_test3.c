@@ -1,6 +1,14 @@
+/*
+Assignment 6
+Name: Robin Babu Padamadan | Shivam Kumar Jha
+Roll No.: 17CS10045 | 17CS30033
+Section 1 (Odd)
+Test Case 3
+*/
+
+
 // GCD sample code
 //Testing Function declaration
-// Shivam Kumar Jha | Robin Babu
 
 int gcd (int a, int b);
 

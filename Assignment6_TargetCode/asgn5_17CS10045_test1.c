@@ -1,6 +1,18 @@
+/*
+Assignment 6
+Name: Robin Babu Padamadan | Shivam Kumar Jha
+Roll No.: 17CS10045 | 17CS30033
+Section 1 (Odd)
+Test Case 1
+*/
+
 //sample code to see how many people are obese
 //it checks function , declarations, and few conditions
-// Shivam Kumar Jha | Robin Babu
+
+
+int printStr(char *s);
+int printInt(int n);
+int readInt(int *);
 
 int count_obese(int weights, int threshold, int num);
 
@@ -12,11 +24,15 @@ int main()
     weights[1] = 15;
     weights[2] = 45;
     weights[3] = 100;
-    weights[4] = 120;
+    
+    // int x;
+    // int *y;
+    // x = readInt(y);
 
     int count = count_obese(weights,50,5);
 
-    printf("The number of obese people is %d", count);
+    printStr("The number of obese people is ");
+    printInt(count);
     return 0; 
 }
 
@@ -24,9 +40,9 @@ int main()
 int count_obese(int weights, int threshold,int num)
 {
     int count=0;
-    // for(int i=0;i<num;++i)
-    // {
-    //     if(weights[i]>threshold) count++;
-    // }
+    for(int i=0;i<num;++i)
+    {
+        if(weights[i]>threshold) count++;
+    }
     return count;
 }

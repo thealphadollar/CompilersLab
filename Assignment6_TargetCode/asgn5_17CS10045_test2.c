@@ -1,5 +1,13 @@
+/*
+Assignment 6
+Name: Robin Babu Padamadan | Shivam Kumar Jha
+Roll No.: 17CS10045 | 17CS30033
+Section 1 (Odd)
+Test Case 2
+*/
+
+
 //Checking expressions, conditions, functions and declaration functionalities
-// Shivam Kumar Jha | Robin Babu
 
 void one()
 {

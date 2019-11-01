@@ -45,14 +45,14 @@ void printQuadArray() {
 
 void quad::print () {
 	// Binary Operations
-	if (op=="PLUS")					cout << result << " = " << arg1 << " + " << arg2;
-	else if (op=="MINUS")				cout << result << " = " << arg1 << " - " << arg2;
-	else if (op=="ASTERISK")			cout << result << " = " << arg1 << " * " << arg2;
-	else if (op=="FORWARDSLASH")			cout << result << " = " << arg1 << " / " << arg2;
+	if (op=="ADD")					cout << result << " = " << arg1 << " + " << arg2;
+	else if (op=="SUB")				cout << result << " = " << arg1 << " - " << arg2;
+	else if (op=="MULT")			cout << result << " = " << arg1 << " * " << arg2;
+	else if (op=="DIVIDE")			cout << result << " = " << arg1 << " / " << arg2;
 	else if (op=="MODOP")			cout << result << " = " << arg1 << " % " << arg2;
 	else if (op=="XOR")				cout << result << " = " << arg1 << " ^ " << arg2;
-	else if (op=="OR")			cout << result << " = " << arg1 << " | " << arg2;
-	else if (op=="AMPERSAND")			cout << result << " = " << arg1 << " & " << arg2;
+	else if (op=="INOR")			cout << result << " = " << arg1 << " | " << arg2;
+	else if (op=="BAND")			cout << result << " = " << arg1 << " & " << arg2;
 	// Shift Operations
 	else if (op=="LEFTOP")			cout << result << " = " << arg1 << " << " << arg2;
 	else if (op=="RIGHTOP")			cout << result << " = " << arg1 << " >> " << arg2;

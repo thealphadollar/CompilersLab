@@ -1,5 +1,14 @@
+/*
+Assignment 6
+Name: Robin Babu Padamadan | Shivam Kumar Jha
+Roll No.: 17CS10045 | 17CS30033
+Section 1 (Odd)
+Test Case 5
+*/
+
+
 //Sample code to MergeSort
-// Shivam Kumar Jha | Robin Babu
+
 void merge(int arr[], int l, int m, int r) 
 { 
     int i, j, k; 
