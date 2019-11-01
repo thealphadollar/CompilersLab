@@ -40,7 +40,7 @@ void genasm() {
 	//To update the goto labels
 	for (vector<quad>::iterator it = array.begin(); it!=array.end(); it++) {
 	int i;
-	if (it->op=="GOTOOP" || it->op=="LT" || it->op=="GT" || it->op=="LE" || it->op=="GE" || it->op=="EQOP" || it->op=="NEOP") {
+	if (it->op=="GOTO" || it->op=="LT" || it->op=="GT" || it->op=="LE" || it->op=="GE" || it->op=="EQOP" || it->op=="NEOP") {
 		i = atoi(it->result.c_str());
 		labelMap [i] = 1;
 	}
@@ -236,7 +236,7 @@ void genasm() {
 				asmfile << "\tcmpl\t" << table->ar[arg2] << "(%rbp), %eax\n";
 				asmfile << "\tjle .L" << (2*labelCount+labelMap.at(atoi( result.c_str() )) +2 );
 			}
-			else if (op=="GOTOOP") {
+			else if (op=="GOTO") {
 				asmfile << "jmp .L" << (2*labelCount+labelMap.at(atoi( result.c_str() )) +2 );
 			}
 			// Unary Operators

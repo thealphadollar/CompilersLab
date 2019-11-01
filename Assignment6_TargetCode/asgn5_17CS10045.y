@@ -559,7 +559,7 @@ relational_expression: shift_expression
 			$$->truelist = makelist (nextinstr());
 			$$->falselist = makelist (nextinstr()+1);
 			emit("LT", "", $1->loc->name, $3->loc->name);
-			emit ("GOTOOP", "");
+			emit ("GOTO", "");
 		}
 		else cout << "Type Error"<< endl;
 	}
@@ -572,7 +572,7 @@ relational_expression: shift_expression
 			$$->truelist = makelist (nextinstr());
 			$$->falselist = makelist (nextinstr()+1);
 			emit("GT", "", $1->loc->name, $3->loc->name);
-			emit ("GOTOOP", "");
+			emit ("GOTO", "");
 		}
 		else cout << "Type Error"<< endl;
 	}
@@ -585,7 +585,7 @@ relational_expression: shift_expression
 			$$->truelist = makelist (nextinstr());
 			$$->falselist = makelist (nextinstr()+1);
 			emit("LE", "", $1->loc->name, $3->loc->name);
-			emit ("GOTOOP", "");
+			emit ("GOTO", "");
 		}
 		else cout << "Type Error"<< endl;
 	}
@@ -598,7 +598,7 @@ relational_expression: shift_expression
 			$$->truelist = makelist (nextinstr());
 			$$->falselist = makelist (nextinstr()+1);
 			emit("GE", "", $1->loc->name, $3->loc->name);
-			emit ("GOTOOP", "");
+			emit ("GOTO", "");
 		}
 		else cout << "Type Error"<< endl;
 	}
@@ -620,7 +620,7 @@ equality_expression: relational_expression
 			$$->truelist = makelist (nextinstr());
 			$$->falselist = makelist (nextinstr()+1);
 			emit("EQOP", "", $1->loc->name, $3->loc->name);
-			emit ("GOTOOP", "");
+			emit ("GOTO", "");
 		}
 		else cout << "Type Error"<< endl;
 	}
@@ -637,7 +637,7 @@ equality_expression: relational_expression
 			$$->truelist = makelist (nextinstr());
 			$$->falselist = makelist (nextinstr()+1);
 			emit("NEOP", "", $1->loc->name, $3->loc->name);
-			emit ("GOTOOP", "");
+			emit ("GOTO", "");
 		}
 		else cout << "Type Error"<< endl;
 	}
@@ -755,7 +755,7 @@ M 	: %empty{	// To store the address of the next instruction
 N 	: %empty { 	// gaurd against fallthrough by emitting a goto
 		$$  = new statement();
 		$$->nextlist = makelist(nextinstr());
-		emit ("GOTOOP","");
+		emit ("GOTO","");
 	}
 
 conditional_expression: logical_OR_expression
@@ -768,13 +768,13 @@ conditional_expression: logical_OR_expression
 		$$->loc->update($5->loc->type);
 		emit("EQUAL", $$->loc->name, $9->loc->name);
 		list<int> l = makelist(nextinstr());
-		emit ("GOTOOP", "");
+		emit ("GOTO", "");
 
 		backpatch($6->nextlist, nextinstr());
 		emit("EQUAL", $$->loc->name, $5->loc->name);
 		list<int> m = makelist(nextinstr());
 		l = merge (l, m);
-		emit ("GOTOOP", "");
+		emit ("GOTO", "");
 
 		backpatch($2->nextlist, nextinstr());
 		convertInt2Bool($1);
@@ -1439,7 +1439,7 @@ iteration_statement
 	    char* intStr = (char*) temp_str.c_str();
 		string str = string(intStr);
 
-		emit ("GOTOOP", str);
+		emit ("GOTO", str);
 	}
 	|DO M statement M WHILE OPENROUNDBRACKET expression CLOSEROUNDBRACKET SEMICOLON 
 	{
@@ -1465,7 +1465,7 @@ iteration_statement
 	    char* intStr = (char*) temp_str.c_str();
 		string str = string(intStr);
 
-		emit ("GOTOOP", str);
+		emit ("GOTO", str);
 		$$->nextlist = $5->falselist;
 	}
 	|FOR OPENROUNDBRACKET expression_statement M expression_statement M expression N CLOSEROUNDBRACKET M statement
@@ -1480,7 +1480,7 @@ iteration_statement
 	    string temp_str = strs.str();
 	    char* intStr = (char*) temp_str.c_str();
 		string str = string(intStr);
-		emit ("GOTOOP", str);
+		emit ("GOTO", str);
 		$$->nextlist = $5->falselist;
 	}
 	;

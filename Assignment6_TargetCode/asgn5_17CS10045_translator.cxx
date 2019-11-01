@@ -383,7 +383,7 @@ expr* convertInt2Bool (expr* e) {	// Convert any expression to bool
 		e->falselist = makelist (nextinstr());
 		emit ("EQOP", "", e->loc->name, "0");
 		e->truelist = makelist (nextinstr());
-		emit ("GOTOOP", "");
+		emit ("GOTO", "");
 	}
 }
 expr* convertBool2Int (expr* e) {	// Convert any expression to bool
@@ -396,7 +396,7 @@ expr* convertBool2Int (expr* e) {	// Convert any expression to bool
 	    string temp_str = strs.str();
 	    char* intStr = (char*) temp_str.c_str();
 		string str = string(intStr);
-		emit ("GOTOOP", str);
+		emit ("GOTO", str);
 		backpatch (e->falselist, nextinstr());
 		emit ("EQUAL", e->loc->name, "false");
 	}
@@ -412,7 +412,7 @@ expr* convertStr2Int (expr* e) {	// Convert str expression to int
 	    string temp_str = strs.str();
 	    char* intStr = (char*) temp_str.c_str();
 		string str = string(intStr);
-		emit ("GOTOOP", str);
+		emit ("GOTO", str);
 		backpatch (e->falselist, nextinstr());
 		emit ("EQUAL", e->loc->name, "false");
 	}
