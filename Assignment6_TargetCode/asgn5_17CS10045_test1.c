@@ -24,9 +24,9 @@ int main()
 int count_obese(int weights, int threshold,int num)
 {
     int count=0;
-    for(int i=0;i<num;++i)
-    {
-        if(weights[i]>threshold) count++;
-    }
+    // for(int i=0;i<num;++i)
+    // {
+    //     if(weights[i]>threshold) count++;
+    // }
     return count;
 }
