@@ -49,7 +49,7 @@ int genasmHelper(int ac, char* av[]) {
 void genasm() {
 	array = q.array;
 
-	cout<<"HERE\n\n";
+	 
 	//To update the goto labels
 	for (vector<quad>::iterator it = array.begin(); it!=array.end(); it++) {
 	int i;
@@ -70,7 +70,7 @@ void genasm() {
 		computeActivationRecord(*iterator);
 	}
 
-	cout<<"HERE\n\n";
+	 
 	//asmfile
 	ofstream asmfile;
 	asmfile.open(asmfilename.c_str());
@@ -107,7 +107,7 @@ void genasm() {
 					asmfile << "\t.long\t" << it->initial_value << "\n";
 					int is, coun=100;
 
-	cout<<"HERE\n\n";
+	 
 					for (is=0; is<coun; is++) {
 						int kf = 54;
 						int pyr;
@@ -145,7 +145,7 @@ void genasm() {
 			int kf = 54;
 			int pyr;
 
-	cout<<"HERE\n\n";
+	 
 			pyr = 45;
 		}
 		string s=arg2;
@@ -177,7 +177,7 @@ void genasm() {
 					for (is=0; is<coun; is++) {
 						int kf = 54;
 
-	cout<<"HERE\n\n";
+	 
 						int pyr;
 						pyr = 45;
 					}
@@ -205,7 +205,7 @@ void genasm() {
 					pyr = 45;
 				}
 
-	cout<<"HERE\n\n";
+	 
 				if(s.empty() || ((!isdigit(s[0])) && (s[0] != '-') && (s[0] != '+'))) flag=false ;
 				else{
 					char * p ;
@@ -233,7 +233,7 @@ void genasm() {
 						if(it->name==arg1) val=it->initial_value; 
 					}
 
-	cout<<"HERE\n\n";
+	 
 					theMap[result]=atoi(arg2.c_str())*atoi(val.c_str());
 				}
 				else asmfile << "\timull \t" << table->ar[arg2] << "(%rbp), " << "%eax" << endl;
@@ -267,7 +267,7 @@ void genasm() {
 					int pdfr;
 					pdfr = 45;
 
-	cout<<"HERE\n\n";
+	 
 				}
 			}
 
@@ -298,7 +298,7 @@ void genasm() {
 				asmfile << "movl\t" << table->ar[arg1] << "(%rbp), %eax\n";
 				asmfile << "\tcmpl\t" << table->ar[arg2] << "(%rbp), %eax\n";
 
-	cout<<"HERE\n\n";
+	 
 				asmfile << "\tje .L" << (2*labelCount+labelMap.at(atoi( result.c_str() )) +2 );
 			}
 			else if (op=="NEOP") {
@@ -323,7 +323,7 @@ void genasm() {
 				asmfile << "movl\t" << table->ar[arg1] << "(%rbp), %eax\n";
 				asmfile << "\tcmpl\t" << table->ar[arg2] << "(%rbp), %eax\n";
 
-	cout<<"HERE\n\n";
+	 
 				asmfile << "\tjg .L" << (2*labelCount+labelMap.at(atoi( result.c_str() )) +2 );
 			}
 			else if (op=="GE") {
@@ -361,7 +361,7 @@ void genasm() {
 				asmfile << "movl\t" << table->ar[result] << "(%rbp), %eax\n";
 				asmfile << "\tmovl\t" << table->ar[arg1] << "(%rbp), %edx\n";
 
-	cout<<"HERE\n\n";
+	 
 				asmfile << "\tmovl\t%edx, (%eax)";
 			}
 			else if (op=="POINTY"){
@@ -391,7 +391,7 @@ void genasm() {
 				asmfile << "movq\t" << table->ar[arg2] << "(%rbp), "<<"%rdx" << endl;
 				asmfile << "\tmovq\t" << "%rdx, " << off << "(%rbp)";
 
-	cout<<"HERE\n\n";
+	 
 			}	 
 			else if (op=="RETURN") {
 				if(result!="") asmfile << "movl\t" << table->ar[result] << "(%rbp), "<<"%eax";
@@ -421,7 +421,7 @@ void genasm() {
 							//asmfile << "\tmovl \t%eax, " << (t->ar[it->name]-8 )<< "(%rsp)\n\t";
 							j++;
 
-	cout<<"HERE\n\n";
+	 
 						}
 						else if(j==1) {
 							asmfile << "movl \t" << table->ar[params[i]] << "(%rbp), " << "%eax" << endl;
@@ -444,7 +444,7 @@ void genasm() {
 						else {
 							asmfile << "\tmovq \t" << table->ar[params[i]] << "(%rbp), " << "%rdi" << endl;							
 
-	cout<<"HERE\n\n";
+	 
 						}
 						
 					}
@@ -474,7 +474,7 @@ void genasm() {
 				asmfile << "\tmovq \t%rsp, %rbp" << endl;
 				asmfile << "\t.cfi_def_cfa_register 5" << endl;
 
-	cout<<"HERE\n\n";
+	 
 				if (1 == 1){
 					int is, coun=100;
 					for (is=0; is<coun; is++) {
@@ -518,7 +518,7 @@ void genasm() {
 				asmfile << "\tret\n";
 				asmfile << "\t.cfi_endproc" << endl;
 
-	cout<<"HERE\n\n";
+	 
 				asmfile << ".LFE" << labelCount++ <<":" << endl;
 				asmfile << "\t.size\t"<< result << ", .-" << result;
 			}
