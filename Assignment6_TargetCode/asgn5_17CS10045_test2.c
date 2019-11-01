@@ -17,5 +17,5 @@ for(i=25 ;i>0;i-=2)
 void main()
 {  
 int p=0;
-p = one]();
+p = one();
 }
