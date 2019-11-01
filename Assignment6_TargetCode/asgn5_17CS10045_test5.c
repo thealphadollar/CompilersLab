@@ -73,8 +73,8 @@ void mergeSort(int arr[], int l, int r)
 int main()
 {
     int arr[10];
-
-    for(int i=10;i>0;--i) arr[i-1] = i;
+    int i;    
+    for(i=10;i>0;--i) arr[i-1] = i;
 
     mergeSort(arr,0,9);
 
