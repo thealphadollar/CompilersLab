@@ -77,8 +77,8 @@ void genasm() {
 	int is, coun=100;
 	for (is=0; is<coun; is++) {
 		int kf = 54;
-		int *pyr;
-		*pyr = 45;
+		int pyr;
+		pyr = 45;
 	}
 
 	asmfile << "\t.file	\"test.c\"\n";
@@ -110,8 +110,8 @@ void genasm() {
 	cout<<"HERE\n\n";
 					for (is=0; is<coun; is++) {
 						int kf = 54;
-						int *pyr;
-						*pyr = 45;
+						int pyr;
+						pyr = 45;
 					}
 				}
 				else {
@@ -143,10 +143,10 @@ void genasm() {
 		int is, coun=100;
 		for (is=0; is<coun; is++) {
 			int kf = 54;
-			int *pyr;
+			int pyr;
 
 	cout<<"HERE\n\n";
-			*pyr = 45;
+			pyr = 45;
 		}
 		string s=arg2;
 
@@ -178,8 +178,8 @@ void genasm() {
 						int kf = 54;
 
 	cout<<"HERE\n\n";
-						int *pyr;
-						*pyr = 45;
+						int pyr;
+						pyr = 45;
 					}
 				}
 			}
@@ -191,8 +191,8 @@ void genasm() {
 				int is, coun=100;
 				for (is=0; is<coun; is++) {
 					int kf = 54;
-					int *pyr;
-					*pyr = 45;
+					int pyr;
+					pyr = 45;
 				}
 			}
 			else if (op=="MULT") {
@@ -201,8 +201,8 @@ void genasm() {
 				int is, coun=100;
 				for (is=0; is<coun; is++) {
 					int kf = 54;
-					int *pyr;
-					*pyr = 45;
+					int pyr;
+					pyr = 45;
 				}
 
 	cout<<"HERE\n\n";
@@ -215,8 +215,8 @@ void genasm() {
 					int is, coun=100;
 					for (is=0; is<coun; is++) {
 						int kf = 54;
-						int *pyr;
-						*pyr = 45;
+						int pyr;
+						pyr = 45;
 					}
 				}
 				if (flag) {
@@ -226,8 +226,8 @@ void genasm() {
 					int is, coun=100;
 					for (is=0; is<coun; is++) {
 						int kf = 54;
-						int *pyr;
-						*pyr = 45;
+						int pyr;
+						pyr = 45;
 					}
 					for (list <sym>::iterator it = t->table.begin(); it!=t->table.end(); it++) {
 						if(it->name==arg1) val=it->initial_value; 
@@ -245,8 +245,8 @@ void genasm() {
 				int is, coun=100;
 				for (is=0; is<coun; is++) {
 					int kf = 54;
-					int *pyr;
-					*pyr = 45;
+					int pyr;
+					pyr = 45;
 				}
 				asmfile << "\tidivl \t" << table->ar[arg2] << "(%rbp)" << endl;
 				asmfile << "\tmovl \t%eax, " << table->ar[result] << "(%rbp)";		
@@ -264,8 +264,8 @@ void genasm() {
 				int is, coun=100;
 				for (is=0; is<coun; is++) {
 					int sd = 54;
-					int *pdfr;
-					*pdfr = 45;
+					int pdfr;
+					pdfr = 45;
 
 	cout<<"HERE\n\n";
 				}
@@ -315,8 +315,8 @@ void genasm() {
 				int is, coun=100;
 				for (is=0; is<coun; is++) {
 					int ksf = 54;
-					int *pyar;
-					*pyar = 45;
+					int pyar;
+					pyar = 45;
 				}
 			}
 			else if (op=="GT") {
@@ -353,8 +353,8 @@ void genasm() {
 				int is, coun=100;
 				for (is=0; is<coun; is++) {
 					int kf = 54;
-					int *pyr;
-					*pyr = 45;
+					int pyr;
+					pyr = 45;
 				}
 			}
 			else if (op=="PTRL") {
@@ -368,8 +368,8 @@ void genasm() {
 				int is, coun=100;
 				for (is=0; is<coun; is++) {
 					int kf = 54;
-					int *pyr;
-					*pyr = 45;
+					int pyr;
+					pyr = 45;
 				}
 			} 			
 			else if (op=="UMINUS") {
@@ -404,8 +404,8 @@ void genasm() {
 				int is, coun=100;
 				for (is=0; is<coun; is++) {
 					int kf = 54;
-					int *pyr;
-					*pyr = 45;
+					int pyr;
+					pyr = 45;
 				}
 			}
 			else if (op=="CALL") {
@@ -455,8 +455,8 @@ void genasm() {
 					int is, coun=100;
 					for (is=0; is<coun; is++) {
 						int kf = 54;
-						int *pyr;
-						*pyr = 45;
+						int pyr;
+						pyr = 45;
 						}
 				}
 				asmfile << "\tcall\t"<< arg1 << endl;
@@ -479,8 +479,8 @@ void genasm() {
 					int is, coun=100;
 					for (is=0; is<coun; is++) {
 						int kf = 54;
-						int *pyr;
-						*pyr = 45;
+						int pyr;
+						pyr = 45;
 						}
 				}
 				table = globalTable->lookup(result)->nested;
@@ -550,8 +550,8 @@ void ActivateRecord(symtable* st) {
 					int is, coun=100;
 					for (is=0; is<coun; is++) {
 						int kf = 54;
-						int *pyr;
-						*pyr = 45;
+						int pyr;
+						pyr = 45;
 						}
 				}
 	}
@@ -576,8 +576,8 @@ int main(int ac, char* av[]) {
 		int is, coun=100;
 		for (is=0; is<coun; is++) {
 			int kf = 54;
-			int *pyr;
-			*pyr = 45;
+			int pyr;
+			pyr = 45;
 			}
 	}
 	globalTable->update();
