@@ -1,13 +1,13 @@
-asmGenerate: comp
-	./comp 1 > asgn5_17CS10045_quads1.out
-	./comp 2 > asgn5_17CS10045_quads2.out
-	./comp 3 > asgn5_17CS10045_quads3.out
-	./comp 4 > asgn5_17CS10045_quads4.out
-	./comp 5 > asgn5_17CS10045_quads5.out
+asmGenerate: asmGenerator
+	./asmGenerator 1 > asgn5_17CS10045_quads1.out
+	./asmGenerator 2 > asgn5_17CS10045_quads2.out
+	./asmGenerator 3 > asgn5_17CS10045_quads3.out
+	./asmGenerator 4 > asgn5_17CS10045_quads4.out
+	./asmGenerator 5 > asgn5_17CS10045_quads5.out
 
-comp: lex.yy.o y.tab.o asgn5_17CS10045_translator.o ass6_17CS30033_target_translator.o
+asmGenerator: lex.yy.o y.tab.o asgn5_17CS10045_translator.o ass6_17CS30033_target_translator.o
 	g++ lex.yy.o y.tab.o asgn5_17CS10045_translator.o \
-	ass6_17CS30033_target_translator.o -lfl -o comp
+	ass6_17CS30033_target_translator.o -lfl -o asmGenerator
 
 ass6_17CS30033_target_translator.o: ass6_17CS30033_target_translator.cxx
 	g++ -c ass6_17CS30033_target_translator.cxx
@@ -32,10 +32,7 @@ y.tab.h: asgn5_17CS10045.y
 	yacc -dtv asgn5_17CS10045.y -W
 	
 clean:
-	rm lex.yy.c y.tab.c y.tab.h lex.yy.o y.tab.o asgn5_17CS10045_translator.o test1 test2 test3 test4 test5 y.output comp ass6_17CS30033_target_translator.o libass3_17CS30033.a asgn5_17CS10045_1.o ass3_17CS30033.o asgn5_17CS10045_2.o asgn5_17CS10045_3.o asgn5_17CS10045_4.o asgn5_17CS10045_5.o *.asm *.out *.gch
-
-clean1:
-	rm test1 asgn5_17CS10045_1.o libass3_17CS30033.a ass3_17CS30033.o
+	rm lex.yy.c y.tab.c y.tab.h lex.yy.o y.tab.o asgn5_17CS10045_translator.o test1 test2 test3 test4 test5 y.output asmGenerator ass6_17CS30033_target_translator.o libass3_17CS30033.a asgn5_17CS10045_1.o ass3_17CS30033.o asgn5_17CS10045_2.o asgn5_17CS10045_3.o asgn5_17CS10045_4.o asgn5_17CS10045_5.o *.asm *.out *.gch
 
 #Test files
 test1: asgn5_17CS10045_1.o libass3_17CS30033.a
