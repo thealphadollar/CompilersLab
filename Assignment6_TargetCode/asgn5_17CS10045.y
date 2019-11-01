@@ -16,7 +16,7 @@ Bison Specifications
 extern int yylex();
 void yyerror(string s);
 extern string Type;
-
+vector <string> allstrings;
 using namespace std;
 %}
 
@@ -200,6 +200,15 @@ primary_expression: IDENTIFIER
 		symtype* tmp = new symtype("PTR");
 		$$->loc = gentemp(tmp, $1);
 		$$->loc->type->ptr = new symtype("CHAR");
+
+		allstrings.push_back($1);
+		stringstream strs;
+		strs << allstrings.size()-1;
+		string temp_str = strs.str();
+		char* intStr = (char*) temp_str.c_str();
+		string str = string(intStr);
+		emit("EQUALSTR", $$->loc->name, str);
+
 	}
 	| OPENROUNDBRACKET expression CLOSEROUNDBRACKET
 	{
