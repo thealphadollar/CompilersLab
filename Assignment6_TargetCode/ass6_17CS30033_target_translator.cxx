@@ -1,4 +1,4 @@
-#include "ass5_17CS10045_translator.h"
+#include "asgn5_17CS10045_translator.h"
 #include <iostream>
 #include <cstring>
 #include <string>
@@ -373,7 +373,7 @@ void genasm() {
 			asmfile << endl;
 		}
 	}
-	asmfile << 	"\t.ident\t	\"Compiled by 14CS10006\"\n";
+	asmfile << 	"\t.ident\t	\"Compiled by Shivam And Robin With <3\"\n";
 	asmfile << 	"\t.section\t.note.GNU-stack,\"\",@progbits\n";
 	asmfile.close();
 }
