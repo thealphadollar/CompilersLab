@@ -12,9 +12,9 @@ Test Case 1
 
 int printStr(char *s);
 int printInt(int n);
-int readInt(int *);
+int readInt(int *x);
 
-int count_obese(int weights, int threshold, int num);
+int count_obese(int *weights, int threshold, int num);
 
 int main()
 {
@@ -25,9 +25,9 @@ int main()
     weights[2] = 45;
     weights[3] = 100;
     
-    // int x;
-    // int *y;
-    // x = readInt(y);
+    int x;
+    int *y;
+    x = readInt(y);
 
     int count = count_obese(weights,50,5);
 
@@ -37,10 +37,11 @@ int main()
 }
 
 
-int count_obese(int weights, int threshold,int num)
+int count_obese(int *weights, int threshold,int num)
 {
     int count=0;
-    for(int i=0;i<num;++i)
+    int i;
+    for(i=0;i<num;++i)
     {
         if(weights[i]>threshold) count++;
     }
