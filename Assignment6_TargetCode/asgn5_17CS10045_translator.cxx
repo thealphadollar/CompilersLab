@@ -1,3 +1,12 @@
+/*
+Assignment 6
+Name: Robin Babu Padamadan | Shivam Kumar Jha
+Roll No.: 17CS10045 | 17CS30033
+Section 1 (Odd)
+*/
+
+
+
 #include "asgn5_17CS10045_translator.h"
 #include <sstream>
 
@@ -403,6 +412,22 @@ expr* convertBool2Int (expr* e) {	// Convert any expression to bool
 }
 
 expr* convertStr2Int (expr* e) {	// Convert str expression to int
+	if (e->type=="STR") {
+		e->loc = gentemp(new symtype("INTEGER"));
+		backpatch (e->truelist, nextinstr());
+		emit ("EQUAL", e->loc->name, "true");
+		stringstream strs;
+	    strs << nextinstr()+1;
+	    string temp_str = strs.str();
+	    char* intStr = (char*) temp_str.c_str();
+		string str = string(intStr);
+		emit ("GOTO", str);
+		backpatch (e->falselist, nextinstr());
+		emit ("EQUAL", e->loc->name, "false");
+	}
+}
+
+expr* convertInt2Strin (expr* e) {	
 	if (e->type=="STR") {
 		e->loc = gentemp(new symtype("INTEGER"));
 		backpatch (e->truelist, nextinstr());

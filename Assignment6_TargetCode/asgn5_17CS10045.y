@@ -1,6 +1,6 @@
 %{
 	/*
-Assignment 5 : Machine Independent Code
+Assignment 6 : Machine Independent Code
 Name: Robin Babu Padamadan | Shivam Kumar Jha
 Roll No.: 17CS10045 | 17CS30033
 Section 1 (Odd)
