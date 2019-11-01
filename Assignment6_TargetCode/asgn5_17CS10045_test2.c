@@ -21,9 +21,10 @@ for(i=25 ;i>0;i-=2)
       i=77;
   }
 }
+}
 
 void main()
 {  
-int p=0;
+int p;
 p = one();
 }
